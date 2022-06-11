@@ -29,6 +29,7 @@ class GraphicalSorterWindow(QMainWindow):
 
     def __init__(self, left, top, width, height, root):
         super().__init__()
+        self.shortcut_folders = dict()
         self.root = root
         self.index = 1
         self.playlist = filter(lambda name: path.isfile(path.join(self.root, name)), iter(os.listdir(self.root)))
@@ -72,23 +73,13 @@ class GraphicalSorterWindow(QMainWindow):
 
     def keyPressEvent(self, event):
         key = event.key()
-        if key == Qt.Key_Right:
-            self.next_media()
-        elif key == Qt.Key_Delete:
+        if key in self.shortcut_folders:
             source_path = path.join(self.root, self.current_video)
             self.next_media()
-            move_file_to_dir(source_path, del_path)
+            move_file_to_dir(source_path, self.shortcut_folders[key])
             self.index -= 1
-        elif key == Qt.Key_K:
-            source_path = path.join(self.root, self.current_video)
+        elif key == Qt.Key_Right:
             self.next_media()
-            move_file_to_dir(source_path, keep_path)
-            self.index -= 1
-        elif key == Qt.Key_M:
-            source_path = path.join(self.root, self.current_video)
-            self.next_media()
-            move_file_to_dir(source_path, meme_path)
-            self.index -= 1
         elif key == Qt.Key_O:
             source_path = path.join(self.root, self.current_video)
             os.system('"{0}"'.format(source_path))
@@ -106,15 +97,23 @@ class GraphicalSorterWindow(QMainWindow):
         self.player.setMedia(content)
         self.player.play()
 
-
-root_path = "D:\\Drive\\work\\nsfw\\vids"
-del_path = path.join(root_path, "del")
-keep_path = path.join(root_path, "keep")
-meme_path = path.join(root_path, "meme")
+    def add_shortcut(self, folder_path, qt_key_ref):
+        self.shortcut_folders[qt_key_ref] = folder_path
 
 
 if __name__ == '__main__':
+    root_folder = "D:\\Drive\\work\\nsfw\\vids"
+    del_folder = path.join(root_folder, "del")
+    keep_folder = path.join(root_folder, "keep")
+    meme_folder = path.join(root_folder, "meme")
+
     app = QApplication([])
-    main_window = GraphicalSorterWindow(200, 200, 700, 500, root_path)
+
+    main_window = GraphicalSorterWindow(200, 200, 700, 500, root_folder)
+    main_window.add_shortcut(del_folder, Qt.Key_Delete)
+    main_window.add_shortcut(keep_folder, Qt.Key_K)
+    main_window.add_shortcut(meme_folder, Qt.Key_M)
+
+    app.setActiveWindow(main_window)
     app.setStyle("Fusion")
     app.exec_()
