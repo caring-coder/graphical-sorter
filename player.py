@@ -18,12 +18,14 @@ def walk(dir_path):
 def move_file_to_dir(source_path, target_dir):
     source_basename = path.basename(source_path)
     target_path = path.join(target_dir, source_basename)
+    size = path.getsize(source_path)
     makedirs(target_dir, exist_ok=True)
     try:
         rename(source_path, target_path)
     except FileNotFoundError as err:
         print(err)
-    return path.getsize(target_dir)
+    print(get_size_format(size))
+    return size
 
 
 def get_size_format(b, factor=1024, suffix="B"):
@@ -38,6 +40,7 @@ def get_size_format(b, factor=1024, suffix="B"):
             return f"{b:.2f}{unit}{suffix}"
         b /= factor
     return f"{b:.2f}Y{suffix}"
+
 
 class GraphicalSorterWindow(QMainWindow):
 
