@@ -1,12 +1,11 @@
+import os
+from datetime import timedelta
 from os import path, listdir, rename, makedirs, system
 
 from PyQt5.QtCore import QUrl, Qt, QRect
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLayout, QStackedLayout, QHBoxLayout, QLabel, QPushButton, \
-    QGridLayout, QWidget, QVBoxLayout
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-
-from datetime import timedelta
+from PyQt5.QtWidgets import QApplication, QMainWindow, QHBoxLayout, QLabel, QWidget, QVBoxLayout
 
 
 def walk(dir_path):
@@ -136,7 +135,7 @@ class GraphicalSorterWindow(QMainWindow):
 
 
 if __name__ == '__main__':
-    root_folder = "D:\\Drive\\work\\nsfw\\vids"
+    root_folder = os.getcwd()
     del_folder = path.join(root_folder, "del")
     keep_folder = path.join(root_folder, "keep")
     meme_folder = path.join(root_folder, "meme")
