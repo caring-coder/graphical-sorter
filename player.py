@@ -1,4 +1,5 @@
 import os
+import subprocess
 from datetime import timedelta
 from os import path, listdir, rename, makedirs, system
 
@@ -112,7 +113,7 @@ class GraphicalSorterWindow(QMainWindow):
             self.next_media()
         elif key == Qt.Key_O:
             source_path = path.join(self.root, self.current_video)
-            system('"{0}"'.format(source_path))
+            subprocess.call('"{0}"'.format(source_path), shell=True)
 
     def next_media(self):
         self.player.stop()
